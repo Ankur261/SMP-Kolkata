@@ -1,0 +1,96 @@
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+
+# Maven
+/target/
+
+# Gradle
+.gradle/
+/build/
+
+# Eclipse
+.classpath
+.project
+.settings/
+*.log
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+
+# VS Code
+.vscode/
+
+# Spring Boot
+/src/main/resources/static/target/
+/src/main/resources/templates/target/
+/src/test/resources/target/
+/src/test/java/target/
+/src/main/java/target/
+
+# Log files
+*.log
+logs/
+
+# Compiled class files
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# Temporary files
+*~
+*.bak
+*.swp
+*.swo
+*.tmp
+temp/
+
+# Environment variables
+.env
+.env.*
+
+# Local configuration files
+application-local.properties
+application-dev.properties
+application-test.properties
+
+# Other common ignored files
+Thumbs.db
+Desktop.ini
+.DS_Store

@@ -8,6 +8,7 @@ public class SmpKolkataApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SmpKolkataApplication.class, args);
+		
 	}
 
 }

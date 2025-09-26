@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>All Locations</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        a, button { margin-right: 5px; }
+    </style>
+    <script>
+        function confirmDelete() {
+            return confirm("Are you sure you want to delete this location?");
+        }
+    </script>
+</head>
+<body>
+    <h2>All Locations</h2>
+
+    <a href="/locations/add">Add New Location</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Short Name</th>
+                <th>Section Code</th>
+                <th>Map Code</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="loc : ${locations}">
+                <td th:text="${loc.loc_cd}"></td>
+                <td th:text="${loc.loc_name}"></td>
+                <td th:text="${loc.loc_srt_nm}"></td>
+                <td th:text="${loc.sec_cd}"></td>
+                <td th:text="${loc.aloc_map_cd}"></td>
+                <td th:text="${loc.status}"></td>
+                <td>
+                    <a th:href="@{/locations/edit/{loc_cd}(loc_cd=${loc.loc_cd})}">Edit</a>
+                    <form th:action="@{/locations/delete/{loc_cd}(loc_cd=${loc.loc_cd})}" 
+                          method="post" style="display:inline"
+                          onsubmit="return confirmDelete()">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

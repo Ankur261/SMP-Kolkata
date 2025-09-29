@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Section List</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        .table-container {
+            overflow-x: auto;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container mt-4">
+        <div class="page-header">
+            <h1 class="h3 mb-0">Section List</h1>
+            <button class="btn btn-primary" onClick="location.href='section/add'">
+                <i class="bi bi-plus-circle"></i> Add Section
+            </button>
+        </div>
+        
+        <div class="card shadow-sm">
+            <div class="card-body p-0">
+                <div class="table-container">
+                    <table class="table table-striped table-hover mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Code</th>
+                                <th>Name</th>
+                                <th>Short Name</th>
+                                <th>Allocation Map Code</th>
+                                
+                                <th>Created By</th>
+                                
+                                <th>Last Updated By</th>
+                                <th>Officer Incharge Code</th>
+                                <th>Officer Incharge Name</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="sec : ${section}">
+                                <td th:text="${sec.sectionCode}"></td>
+                                <td th:text="${sec.sectionName}"></td>
+                                <td th:text="${sec.sectionShortName}"></td>
+                                <td th:text="${sec.secAloMapCode}"></td>
+                                <td th:text="${sec.createdBy}"></td>
+                                <td th:text="${sec.lastUpdatedBy}"></td>
+                                <td th:text="${sec.officerInchargeCode}"></td>
+                                <td th:text="${sec.officerInchargeName}"></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <form th:action="@{/section/delete/{code}(code=${sec.sectionCode})}" method="post">
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                <i class="bi bi-trash"></i> Delete
+                                            </button>
+                                        </form>
+                                        <form th:action="@{/section/update/{code}(code=${sec.sectionCode})}" method="put">
+                                            <button type="submit" class="btn btn-warning btn-sm">
+                                                <i class="bi bi-pencil"></i> Update
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div th:replace="fragments/documentForm :: documentForm"></div>
+        </div>
+    </div>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+</body>
+</html>

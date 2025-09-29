@@ -1,0 +1,24 @@
+<div th:fragment="documentForm">
+    <form th:action="@{/documents/upload}" method="post" enctype="multipart/form-data">
+        <div>
+            <label for="file">Select File:</label>
+            <input type="file" name="file" id="file" required>
+        </div>
+
+        <div>
+            <label for="docDesc">Description:</label>
+            <input type="text" name="docDesc" id="docDesc" required>
+        </div>
+
+        <div>
+            <label for="uploadedBy">Uploaded By:</label>
+            <input type="text" name="uploadedBy" id="uploadedBy" required>
+        </div>
+
+        <button type="submit">Upload</button>
+    </form>
+
+    <div th:if="${message}">
+        <p th:text="${message}"></p>
+    </div>
+</div>

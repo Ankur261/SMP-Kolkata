@@ -62,5 +62,16 @@ public interface LocationQueries {
     	    WHERE status != 'INACTIVE'
     	    ORDER BY loc_cd
     	""";
+    
 
+    public static final String Get_ADDRESS = """
+    	    SELECT loc_name FROM address
+    	    WHERE loc_code = :loc_code
+    	   
+    	""";
+    
+    public static final String VIEW_ALL_ADDRESS = """
+    	    SELECT loc_name,loc_code FROM Address
+    	   
+    	""";
 }

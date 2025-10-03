@@ -2,15 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Add Location</title>
- 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 <div class="container mt-5">
     <h2 class="mb-4">Add New Location</h2>
 
-    <form th:action="@{/locations/add}" th:object="${location}" method="post">
-
+    <!-- LOCATION FORM -->
+    <form th:action="@{/locations/add}" th:object="${location}" method="post" id="locationForm">
         <div class="mb-3">
             <label class="form-label">Location Code</label>
             <input type="text" class="form-control" th:field="*{loc_cd}" placeholder="Enter code" required />
@@ -18,12 +17,16 @@
 
         <div class="mb-3">
             <label class="form-label">Location Name</label>
-            <input type="text" class="form-control" th:field="*{loc_name}" placeholder="Enter name" required />
+            <input type="text" class="form-control" th:field="*{loc_name}" pattern="[A-Z\s]+"
+                   title="Only capital letters allowed" oninput="this.value = this.value.toUpperCase()"
+                   placeholder="Enter name" required />
+            <div th:if="${#fields.hasErrors('loc_name')}" th:errors="*{loc_name}" class="text-danger"></div>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Short Name</label>
-            <input type="text" class="form-control" th:field="*{loc_srt_nm}" placeholder="Enter short name" maxlength="3" />
+            <input type="text" class="form-control" th:field="*{loc_srt_nm}" placeholder="Enter short name" />
+            <div th:if="${#fields.hasErrors('loc_srt_nm')}" th:errors="*{loc_srt_nm}" class="text-danger"></div>
         </div>
 
         <div class="mb-3">
@@ -37,7 +40,6 @@
             </select>
         </div>
 
-       
         <div class="mb-3">
             <label class="form-label">Mapped Location</label>
             <select class="form-select" th:field="*{aloc_map_cd}">
@@ -49,7 +51,6 @@
             </select>
         </div>
 
-       
         <div class="mb-3">
             <label class="form-label">Status</label><br/>
             <div class="form-check form-check-inline">
@@ -62,7 +63,6 @@
             </div>
         </div>
 
-      
         <div class="mb-3">
             <label class="form-label">Meta Status</label><br/>
             <div class="form-check form-check-inline">
@@ -75,15 +75,19 @@
             </div>
         </div>
 
-     
         <input type="hidden" th:field="*{created_by}" th:value="'SYSTEM'" />
         <input type="hidden" th:field="*{last_updated_by}" th:value="'SYSTEM'" />
 
-        <button type="submit" class="btn btn-primary">Add Location</button>
+        <button type="submit" class="btn btn-primary" id="addLocationBtn" >Add Location</button>
+        <a href="/locations/view" class="btn btn-secondary ms-2">Back to List</a>
     </form>
+
+    <hr/>
+
+ 
 </div>
 
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

@@ -10,21 +10,25 @@
 
     <form th:action="@{/locations/update}" th:object="${location}" method="post">
 
+       
         <div class="mb-3">
             <label class="form-label">Location Code</label>
             <input type="text" class="form-control" th:field="*{loc_cd}" readonly />
         </div>
 
+        <!-- Location Name -->
         <div class="mb-3">
             <label class="form-label">Location Name</label>
             <input type="text" class="form-control" th:field="*{loc_name}" required />
         </div>
 
+        
         <div class="mb-3">
             <label class="form-label">Short Name</label>
             <input type="text" class="form-control" th:field="*{loc_srt_nm}" maxlength="3" />
         </div>
 
+        
         <div class="mb-3">
             <label class="form-label">Section Code</label>
             <select class="form-select" th:field="*{sec_cd}" required>
@@ -47,6 +51,7 @@
             </select>
         </div>
 
+       
         <div class="mb-3">
             <label class="form-label">Status</label><br/>
             <div class="form-check form-check-inline">
@@ -64,6 +69,7 @@
             <input type="text" class="form-control" th:field="*{last_updated_by}" />
         </div>
 
+        
         <div class="mb-3">
             <label class="form-label">Meta Status</label><br/>
             <div class="form-check form-check-inline">
@@ -85,6 +91,7 @@
             </select>
         </div>
 
+     
         <button type="submit" class="btn btn-success">Update Location</button>
         <a href="/locations/view" class="btn btn-secondary ms-2">Back to List</a>
     </form>

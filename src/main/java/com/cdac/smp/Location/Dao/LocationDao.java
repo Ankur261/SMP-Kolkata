@@ -92,6 +92,21 @@ public class LocationDao implements LocationQueries {
             return List.of(); 
         }
     }
+    
+    public Location getLocationByCode(String loc_cd) {
+        try {
+            String sql = "SELECT * FROM ems_prop_loc_mst WHERE loc_cd = :loc_cd";
+            return namedParameterJdbcTemplate.queryForObject(
+                    sql,
+                    new MapSqlParameterSource("loc_cd", loc_cd),
+                    locationRowMapper()
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
     public int updateLocation1(Location location) {
         try {

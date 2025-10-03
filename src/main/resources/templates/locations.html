@@ -2,12 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>All Locations</title>
-    <style>
-        table { border-collapse: collapse; width: 100%; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
-        a, button { margin-right: 5px; }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script>
         function confirmDelete() {
             return confirm("Are you sure you want to delete this location?");
@@ -15,12 +10,16 @@
     </script>
 </head>
 <body>
-    <h2>All Locations</h2>
 
-    <a href="/locations/add">Add New Location</a>
 
-    <table>
-        <thead>
+
+<div class="container mt-5">
+    <h2 class="mb-4">All Locations</h2>
+
+    <a href="/locations/add" class="btn btn-primary mb-3">Add New Location</a>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-light">
             <tr>
                 <th>Code</th>
                 <th>Name</th>
@@ -40,15 +39,95 @@
                 <td th:text="${loc.aloc_map_cd}"></td>
                 <td th:text="${loc.status}"></td>
                 <td>
-                    <a th:href="@{/locations/edit/{loc_cd}(loc_cd=${loc.loc_cd})}">Edit</a>
+                    <a th:href="@{/locations/edit/{loc_cd}(loc_cd=${loc.loc_cd})}" class="btn btn-sm btn-warning">Edit</a>
                     <form th:action="@{/locations/delete/{loc_cd}(loc_cd=${loc.loc_cd})}" 
-                          method="post" style="display:inline"
-                          onsubmit="return confirmDelete()">
-                        <button type="submit">Delete</button>
+                          method="post" class="d-inline" onsubmit="return confirmDelete()">
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                     </form>
                 </td>
             </tr>
         </tbody>
     </table>
+   <div th:if="${message}" class="alert alert-success mt-2" th:text="${message}"></div>
+   <div th:if="${errorMessage}" class="alert alert-danger mt-2" th:text="${errorMessage}"></div>
+   
+<div th:replace="~{fragment/documentForm :: documentForm}"></div>
+
+    <h3 class="mt-4">Uploaded Documents</h3>
+<table class="table table-bordered table-striped">
+    <thead class="table-light">
+        <tr>
+            <th>Document Name</th>
+            <th>Description</th>
+            <th>Uploaded By</th>
+            <th>Type</th>
+            <th>Download</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="doc : ${documents}">
+            <td th:text="${doc.docFileName}"></td>
+            <td th:text="${doc.docDesc}"></td>
+            <td th:text="${doc.uploadedBy}"></td>
+            <td th:text="${doc.docType}"></td>
+            
+           <td>
+ <button class="btn btn-sm btn-info"
+    th:attr="onclick=|showPreview('${'/documents/view/' + doc.docFileId}', '${'/documents/download/' + doc.docFileId}', '${doc.docFileName}')|">
+    View
+</button>
+
+
+   
+</td>
+        </tr>
+    </tbody>
+</table>
+
+</div>
+
+
+<!-- Document View -->
+<div id="previewSection" class="mt-4" style="display:none;">
+    <h5>Document Preview</h5>
+    <div id="previewContent" style="width:100%; height:auto; border:none;"></div>
+    <a id="downloadBtn" class="btn btn-success mt-2" href="#" target="_blank">Download</a>
+     <button type="button" class="btn btn-sm btn-danger" onclick="closePreview()">Close</button>
+</div>
+
+<script>
+function showPreview(viewUrl, downloadUrl, fileName) {
+    const previewSection = document.getElementById("previewSection");
+    const previewContent = document.getElementById("previewContent"); 
+    const downloadBtn = document.getElementById("downloadBtn");
+
+    // Clear old content
+    previewContent.innerHTML = "";
+
+    // Decide based on file extension
+    if (fileName.toLowerCase().endsWith(".pdf")) {
+        previewContent.innerHTML = `<iframe src="${viewUrl}" 
+            style="width:100%; height:600px; border:none;"></iframe>`;
+    } else if (/\.(jpg|jpeg|png|gif)$/i.test(fileName)) {
+        previewContent.innerHTML = `<img src="${viewUrl}" 
+            style="max-width:100%; max-height:auto; border:none;" alt="Document Preview">`;
+    } else {
+        previewContent.innerHTML = `<p>No preview available for this file type.</p>`;
+    }
+
+    downloadBtn.href = downloadUrl;
+    previewSection.style.display = "block";
+}
+
+function closePreview(){
+	const previewSection= document.getElementById("previewSection");
+	const previewContent = document.getElementById("previewContent");
+	
+	previewContent.innerHTML="";
+	previewSection.style.display="none";
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+

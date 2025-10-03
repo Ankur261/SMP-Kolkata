@@ -10,13 +10,14 @@
     </script>
 </head>
 <body>
+<!-- Navbar Fragment -->
+   
+<div th:replace="~{fragment/navbar :: navbar}"></div>
 
-
-
-<div class="container mt-5">
+<div class="container mt-5">s
     <h2 class="mb-4">All Locations</h2>
 
-    <a href="/locations/add" class="btn btn-primary mb-3">Add New Location</a>
+    
 
     <table class="table table-bordered table-striped">
         <thead class="table-light">
@@ -51,7 +52,7 @@
    <div th:if="${message}" class="alert alert-success mt-2" th:text="${message}"></div>
    <div th:if="${errorMessage}" class="alert alert-danger mt-2" th:text="${errorMessage}"></div>
    
-<div th:replace="~{fragment/documentForm :: documentForm}"></div>
+   
 
     <h3 class="mt-4">Uploaded Documents</h3>
 <table class="table table-bordered table-striped">

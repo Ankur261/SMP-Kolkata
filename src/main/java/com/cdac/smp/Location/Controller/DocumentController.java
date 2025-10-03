@@ -25,6 +25,12 @@ public class DocumentController {
     public DocumentController(DocumentService documentService) {
         this.documentService = documentService;
     }
+    
+    @GetMapping("/upload")
+    public String showUploadForm() {
+        return "uploadDocument";
+    }
+
     @PostMapping("/upload")
     public String uploadFile(@RequestParam("file") MultipartFile file,
                              @RequestParam("docDesc") String docDesc,
@@ -63,7 +69,7 @@ public class DocumentController {
             String fileName = doc.getDocFileName();
             String contentType = doc.getDocType();
 
-            // Force PDF type if filename ends with .pdf
+           
             if (fileName.toLowerCase().endsWith(".pdf")) {
                 contentType = "application/pdf";
             }

@@ -16,5 +16,6 @@ public interface UserService {
 	void setFlagByOne(String loginId);
 	int getflagValue(String loginId);
 	void setFlagByZero(String loginId);
+	boolean existsByLoginId(String loginId);
 	
 }

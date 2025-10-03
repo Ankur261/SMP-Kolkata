@@ -7,9 +7,9 @@ public class UserQueries {
 
 	public static final String INSERT_USER = 
 		    "INSERT INTO ems_admin_users " +
-		    "(user_id, user_name, login_id, email, mobile_number, password, status, division, designation, section_cd, department, created_by, created_dt, last_updated_by, last_updated_dt, meta_status, meta_remarks, agent_cd, user_type) " +
+		    "(user_id, user_name, login_id, email, mobile_number, password, status, division, designation, section_cd, department, created_by, created_dt, last_updated_by, last_updated_dt, meta_status, meta_remarks, agent_cd, user_type,address) " +
 		    "VALUES " +
-		    "(:userId, :userName, :loginId, :email, :mobileNumber, :password, :status, :division, :designation, :sectionCd, :department, :createdBy, :createdDt, :lastUpdatedBy, :lastUpdatedDt, :metaStatus, :metaRemarks, :agentCd, :userType)";
+		    "(:userId, :userName, :loginId, :email, :mobileNumber, :password, :status, :division, :designation, :sectionCd, :department, :createdBy, :createdDt, :lastUpdatedBy, :lastUpdatedDt, :metaStatus, :metaRemarks, :agentCd, :userType,:address)";
 
 		    public static final String GET_USER_BY_ID = 
 		        "SELECT * FROM ems_admin_users WHERE user_id = :userId";
@@ -41,4 +41,7 @@ public class UserQueries {
 		    
 		    public static final String GET_FLAG_VALUE=
 		    		"SELECT flag from ems_admin_users where login_id=:loginId";
+		    
+		    public static final String CHECK_USER_BY_LOGINID =
+		            "SELECT COUNT(*) FROM ems_admin_users WHERE login_id = :loginId";
 }

@@ -65,4 +65,9 @@ public class UserServiceImpl implements UserService {
 	public void setFlagByZero(String loginId) {
 		userDao.setFlagToZero(loginId);
 	}
+	
+	public boolean existsByLoginId(String loginId) {
+	    return userDao.existsByLoginId(loginId);
+	}
+
 }

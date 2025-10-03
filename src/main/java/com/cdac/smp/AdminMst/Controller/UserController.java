@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.cdac.smp.AdminMst.CustomeException.ApiException;
+import com.cdac.smp.AdminMst.Dao.AddressDao;
 import com.cdac.smp.AdminMst.Model.User;
 import com.cdac.smp.AdminMst.Service.UserService;
 
@@ -23,17 +24,23 @@ import jakarta.validation.Valid;
 public class UserController {
 
     private final UserService userService;
-    public UserController(UserService userService) {
+    private final AddressDao addressDao;
+    public UserController(UserService userService,AddressDao addressDao) {
         this.userService = userService;
+        this.addressDao=addressDao;
     }
-
-    //
     @PostMapping("/create")
-    public String createUser(@Valid @ModelAttribute("user") User user,BindingResult bindingResult) {
+    public String createUser(@Valid @ModelAttribute("user") User user,BindingResult bindingResult, Model model) {
     	
     	if(bindingResult.hasErrors()) {
     		return "AdminMst/userCreate";
     	}
+    	
+    	if (userService.existsByLoginId(user.getLoginId())) {
+            model.addAttribute("errorMessage", "User with this Login ID already exists!");
+            return "AdminMst/userCreate";  
+        }
+
     	System.out.println("before User creatiion..................");
     	userService.createUser(user);
         System.out.println("after User creatiion..................");
@@ -43,6 +50,7 @@ public class UserController {
     @GetMapping("/create")
     public String createUserForm(Model model) {
         model.addAttribute("user",new User());
+        model.addAttribute("addresses", addressDao.getAllAddresses());
         return "AdminMst/userCreate";
     }
 

@@ -81,5 +81,8 @@ public class User {
     
     @JsonProperty("flag")
     private Integer flag;
+    
+    @JsonProperty("addresss")
+    private String address;
 
 }

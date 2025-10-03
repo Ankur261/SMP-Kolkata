@@ -43,6 +43,7 @@ public class UserDao {
         params.put("metaRemarks", user.getMetaRemarks());
         params.put("agentCd", user.getAgentCode());
         params.put("userType", user.getUserType());
+        params.put("address", user.getAddress());
         return params;
     }
 
@@ -115,5 +116,14 @@ public class UserDao {
 	    params.put("loginId", loginId);
 		jdbcTemplate.update(UserQueries.SET_FLAG_TO_ZERO,params);
 	}
+	public boolean existsByLoginId(String loginId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("loginId", loginId);
+
+        Integer count = jdbcTemplate.queryForObject(
+                UserQueries.CHECK_USER_BY_LOGINID, params, Integer.class);
+
+        return count != null && count > 0;
+    }
 
 }

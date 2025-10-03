@@ -10,8 +10,6 @@ import com.cdac.smp.Location.Model.Location;
 @Transactional
 
 public class LocationService {
-	@Autowired
-	private Location loc;
 	
 	
 	

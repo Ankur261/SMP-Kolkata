@@ -1,0 +1,53 @@
+<!-- fragments/documentForm.html -->
+<div th:fragment="documentForm">
+    <div class="card mt-4 shadow-sm">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0">Upload New Document</h5>
+        </div>
+        <div class="card-body">
+
+            <form th:action="@{/documents/upload}" method="post" enctype="multipart/form-data" class="form-container">
+                <div class="mb-3">
+                    <label for="docFileName" class="form-label">Document Name:</label>
+                    <input type="text" class="form-control" id="docFileName" name="docFileName" placeholder="Enter document name" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="docDesc" class="form-label">Description:</label>
+                    <textarea class="form-control" id="docDesc" name="docDesc" rows="3" placeholder="Enter description"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="docType" class="form-label">Document Type:</label>
+                    <select class="form-select" id="docType" name="docType" required>
+                        <option value="" disabled selected>Select type</option>
+                        <option value="PDF">PDF</option>
+                        <option value="WORD">Word</option>
+                        <option value="IMAGE">Image</option>
+                        <option value="OTHER">Other</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="uploadedBy" class="form-label">Uploaded By:</label>
+                    <input type="text" class="form-control" id="uploadedBy" name="uploadedBy" placeholder="Enter your name" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="file" class="form-label">Choose File:</label>
+                    <input class="form-control" type="file" id="file" name="file" required>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <button type="reset" class="btn btn-secondary">Clear</button>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+   
+
+
+    </div>
+</div>

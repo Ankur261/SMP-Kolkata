@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User List</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+
+    <h2 class="mb-4">Users List</h2>
+    <button onClick=handlesubmit()>Create a New User</button>
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>User ID</th>
+                <th>Name</th>
+                <th>Login ID</th>
+                <th>Email</th>
+                <th>Mobile</th>
+                <th>Status</th>
+                <th>Division</th>
+                <th>Designation</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.userId}"></td>
+                <td th:text="${user.userName}"></td>
+                <td th:text="${user.loginId}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.mobileNumber}"></td>
+                <td th:text="${user.status}"></td>
+                <td th:text="${user.division}"></td>
+                <td th:text="${user.designation}"></td>
+              <td>
+              
+              
+              <form th:action="@{/user/delete/{id}(id=${user.userId})}" method="post">
+              	<button type="submit">Delete</button>
+              	</form>
+				<form th:action="@{/user/edit/{id}(id=${user.userId})}" method="get">
+              	<button type="submit">Edit</button>
+              	</form>
+			 </td>
+		   </tr>
+        </tbody>
+    </table>
+    <div class="container mt-5">
+    <h2 class="mb-4">Upload Document</h2>
+    	<div th:replace="AdminMst/uploadDoc :: documentForm"></div>
+	</div>
+</div>
+</body>
+<script>
+function handlesubmit(){
+	window.location.replace('create');
+}
+
+function confirmDelete(){
+	return "Are you sure want to delete??";
+}
+
+</script>
+</html>

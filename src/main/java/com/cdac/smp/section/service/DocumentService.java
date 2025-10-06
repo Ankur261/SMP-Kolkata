@@ -2,6 +2,7 @@ package com.cdac.smp.section.service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,11 +27,13 @@ public class DocumentService {
         Documents doc = new Documents();
         doc.setDocFileId(UUID.randomUUID().toString());
         doc.setDocFileName(file.getOriginalFilename());
-        doc.setDocDesc(desc);
         doc.setDocType(file.getContentType());
-        doc.setUploadedBy(uploadedBy);
-        doc.setUploadedAt(LocalDateTime.now());
-        doc.setFileData(new Binary(file.getBytes())); // store actual bytes
+        doc.setFileData(new Binary(file.getBytes()));
+
+        // Optional: auto-fill upload time if user didn’t input
+        if (doc.getUploadedAt() == null) {
+            doc.setUploadedAt(LocalDateTime.now());
+        }
 
         documentsRepository.save(doc);
         return doc.getDocFileId();
@@ -39,5 +42,9 @@ public class DocumentService {
     // Fetch by id
     public Optional<Documents> getDocument(String id) {
         return documentsRepository.findById(id);
+    }
+    
+    public List<Documents> getAllDocuments() {
+    	return documentsRepository.findAll() ;
     }
 }

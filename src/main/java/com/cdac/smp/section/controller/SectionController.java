@@ -1,33 +1,43 @@
 package com.cdac.smp.section.controller;
 
+import com.cdac.smp.section.service.*;
+
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
+import com.cdac.smp.section.model.Address;
 import com.cdac.smp.section.model.Section;
-import com.cdac.smp.section.service.SectionService;
-
 import jakarta.validation.Valid;
 
 @Controller
 public class SectionController {
 
     private final SectionService sectionService;
+    private final DocumentService documentService ;
+    private final AddressService addressService ;
 
-    public SectionController(SectionService sectionService) {
+    public SectionController(SectionService sectionService, DocumentService documentService, AddressService addressService) {
         this.sectionService = sectionService;
+		this.documentService = documentService;
+		this.addressService =addressService ;
     }
 
     @GetMapping("/section")
     public String homePage(Model model) {
+    	model.addAttribute("documents", documentService.getAllDocuments());
         model.addAttribute("section", sectionService.getAllSection());
         return "sectionView/index"; 
     }
 
     @GetMapping("/section/add")
     public String addSection(Model model) {
+    	
         model.addAttribute("section", new Section());
+        model.addAttribute("address", addressService.getAllAddress());
         return "sectionView/addSection"; 
     }
 
@@ -69,4 +79,10 @@ public class SectionController {
         System.out.println("Updated section: " + section.getSectionName() + " | Result: " + dbResult);
         return "redirect:/section";
     }
+    
+    @GetMapping("section/address-list")
+    public List<Address> getAllAddress() {
+    	return addressService.getAllAddress() ;
+    }
+    
 }

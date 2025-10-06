@@ -20,7 +20,7 @@ public class Documents {
     private String docType;
     private String uploadedBy;
     private LocalDateTime uploadedAt;
+    private String delFlag ;
 
-    // actual file content
     private Binary fileData;
 }

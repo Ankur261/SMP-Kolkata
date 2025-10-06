@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -31,7 +32,6 @@ public class DocumentController {
                              @RequestParam("uploadedBy") String uploadedBy,
                              RedirectAttributes redirectAttributes) throws IOException {
         String fileId = documentService.saveDocument(file, docDesc, uploadedBy);
-        System.out.print("Hello");
         redirectAttributes.addFlashAttribute("message", "File uploaded successfully with ID: " + fileId);
         return "redirect:/"; // back to home
     }
@@ -39,7 +39,7 @@ public class DocumentController {
     @GetMapping("/download/{id}")
     public ResponseEntity<byte[]> downloadFile(@PathVariable String id) {
         Optional<Documents> docOpt = documentService.getDocument(id);
-
+        System.out.print(docOpt);
         if (docOpt.isPresent()) {
             Documents doc = docOpt.get();
             return ResponseEntity.ok()
@@ -49,5 +49,19 @@ public class DocumentController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+    }
+    
+    @GetMapping("/all")
+    public String getAllDocuments(Model model) {
+    	
+    	System.out.print(documentService.getAllDocuments());
+    	return "" ;
+    }
+    
+    @GetMapping("/form")
+    public String getForm(Model model) {
+    	
+    	model.addAttribute("document", new Documents());
+    	return "sectionView/documentForm" ;
     }
 }

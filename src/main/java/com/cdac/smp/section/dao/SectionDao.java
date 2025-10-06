@@ -64,28 +64,15 @@ public class SectionDao {
     }
 	
 	public int deleteSection(String sectionCode) {
-		 String sql = """
-			        UPDATE ems_prop_sec_mst 
-			        SET del_flag = 'Y', last_updated_dt = NOW() 
-			        WHERE sec_cd = :secCd
-			    """;
+		 
 
 			    Map<String, Object> params = new HashMap<>();
 			    params.put("secCd", sectionCode);
 
-			    return namedParameterJdbcTemplate.update(sql, params);
+			    return namedParameterJdbcTemplate.update(sectionQueries.deleteSection, params);
 	}
 	
 	 public int updateSection(Section section) {
-	        String sql = "UPDATE ems_prop_sec_mst " +
-	                     "SET sec_name = :secName, " +
-	                     "    sec_srt_nm = :secShortName, " +
-	                     "    sec_aloc_map_cd = :secAlocMapCd, " +
-	                     "    last_updated_dt = NOW(), " +
-	                     "    lat_updated_by = :lastUpdatedBy, " +
-	                     "    officer_incharge_cd = :officerInchargeCd, " +
-	                     "    officer_incharge_name = :officerInchargeName " +
-	                     "WHERE sec_cd = :secCd";
 
 	        Map<String, Object> params = new HashMap<>();
 	        params.put("secCd", section.getSectionCode());
@@ -96,20 +83,16 @@ public class SectionDao {
 	        params.put("officerInchargeCd", section.getOfficerInchargeCode());
 	        params.put("officerInchargeName", section.getOfficerInchargeName());
 
-	        return namedParameterJdbcTemplate.update(sql, params);
+	        return namedParameterJdbcTemplate.update(sectionQueries.updateSection, params);
 	    }
 	 
 	 public Section getSectionByCode(String sectionCode) {
-	        String sql = "SELECT sec_cd, sec_name, sec_srt_nm, sec_aloc_map_cd, del_flag, " +
-	                     "created_dt, created_by, last_updated_dt, lat_updated_by, " +
-	                     "officer_incharge_cd, officer_incharge_name " +
-	                     "FROM ems_prop_sec_mst WHERE sec_cd = :sec_cd";
 
 	        Map<String, Object> params = new HashMap<>();
 	        params.put("sec_cd", sectionCode);
 
 	        return namedParameterJdbcTemplate.queryForObject(
-	            sql,
+	        	sectionQueries.getSectionByCode,
 	            params,
 	            (rs, rowNum) -> {
 	                Section section = new Section();

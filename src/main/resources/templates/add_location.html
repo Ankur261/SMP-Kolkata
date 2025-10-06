@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Location</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+ 
+<div th:replace="~{fragment/navbar :: navbar}"></div>
+
+<div class="container mt-5">
+    <h2 class="mb-4">Add New Location</h2>
+
+    <!-- LOCATION FORM -->
+    <form th:action="@{/locations/add}" th:object="${location}" method="post" id="locationForm">
+        <div class="mb-3">
+            <label class="form-label">Location Code</label>
+            <input type="text" class="form-control" th:field="*{loc_cd}" placeholder="Enter code" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Location Name</label>
+            <input type="text" class="form-control" th:field="*{loc_name}" pattern="[A-Z\s]+"
+                   title="Only capital letters allowed" oninput="this.value = this.value.toUpperCase()"
+                   placeholder="Enter name" required />
+            <div th:if="${#fields.hasErrors('loc_name')}" th:errors="*{loc_name}" class="text-danger"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Short Name</label>
+            <input type="text" class="form-control" th:field="*{loc_srt_nm}" placeholder="Enter short name" />
+            <div th:if="${#fields.hasErrors('loc_srt_nm')}" th:errors="*{loc_srt_nm}" class="text-danger"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Section Code</label>
+            <select class="form-select" th:field="*{sec_cd}" required>
+                <option value="" disabled selected>Select Section</option>
+                <option value="FIN">Fin</option>
+                <option value="HR">HR</option>
+                <option value="IT">IT</option>
+                <option value="ADM">Adm</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Mapped Location</label>
+            <select class="form-select" th:field="*{aloc_map_cd}">
+                <option value="" disabled selected>Select Location</option>
+                <option value="MUM">Mum</option>
+                <option value="PUN">Pun</option>
+                <option value="DEL">Del</option>
+                <option value="BAN">Ban</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Status</label><br/>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" th:field="*{status}" value="A" />
+                <label class="form-check-label">Active</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" th:field="*{status}" value="I" />
+                <label class="form-check-label">Inactive</label>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Meta Status</label><br/>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" th:field="*{meta_status}" value="A" />
+                <label class="form-check-label">Active</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" th:field="*{meta_status}" value="I" />
+                <label class="form-check-label">Inactive</label>
+            </div>
+        </div>
+
+        <input type="hidden" th:field="*{created_by}" th:value="'SYSTEM'" />
+        <input type="hidden" th:field="*{last_updated_by}" th:value="'SYSTEM'" />
+
+        <button type="submit" class="btn btn-primary" id="addLocationBtn" >Add Location</button>
+        <a href="/locations/view" class="btn btn-secondary ms-2">Back to List</a>
+    </form>
+
+    <hr/>
+
+ 
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

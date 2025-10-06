@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Success message</title>
+</head>
+
+<body>
+	<h1>
+		You have successfully uploaded the Documents.!!!
+	</h1>
+	
+	<div th:if="${message}" class="alert alert-success">
+    	<p th:text="${message}"></p>
+	</div>
+</body>
+
+</html>

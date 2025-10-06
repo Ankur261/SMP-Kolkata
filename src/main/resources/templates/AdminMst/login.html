@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>User Login</h2>
+    <form th:action="@{/user/login}" method="post" th:object="${user}" class="mt-4">
+
+        <div class="mb-3">
+            <label class="form-label">Login ID</label>
+            <input type="text" th:field="*{loginId}" class="form-control" placeholder="Enter Login ID" required>
+        </div> 
+        <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input type="password" th:field="*{password}" class="form-control" placeholder="Enter Password" required>
+        </div>
+
+        <div th:if="${error}" class="alert alert-danger">
+            <p th:text="${error}"></p>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+</div>
+</body>
+</html>

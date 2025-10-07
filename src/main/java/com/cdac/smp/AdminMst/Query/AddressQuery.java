@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 public class AddressQuery {
     public static final String GET_ALL_ADDRESSES =
     		"""
-    			SELECT loc_id, loc_name, loc_code FROM "Address" ORDER BY loc_name
+    			SELECT loc_id, loc_name, loc_code FROM address ORDER BY loc_name
     		""";
 }
 

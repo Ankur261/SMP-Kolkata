@@ -1,5 +1,6 @@
 package com.cdac.smp.AdminMst.Controller;
-
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.cdac.smp.AdminMst.CustomeException.ApiException;
 import com.cdac.smp.AdminMst.Dao.AddressDao;
 import com.cdac.smp.AdminMst.Model.User;
+import com.cdac.smp.AdminMst.Service.LoginEntryService;
 import com.cdac.smp.AdminMst.Service.UserService;
 
 import jakarta.validation.Valid;
@@ -25,9 +27,12 @@ public class UserController {
 
     private final UserService userService;
     private final AddressDao addressDao;
-    public UserController(UserService userService,AddressDao addressDao) {
+    private final LoginEntryService loginEntryService;
+    
+    public UserController(UserService userService,AddressDao addressDao,LoginEntryService loginEntryService) {
         this.userService = userService;
         this.addressDao=addressDao;
+        this.loginEntryService=loginEntryService;
     }
     @PostMapping("/create")
     public String createUser(@Valid @ModelAttribute("user") User user,BindingResult bindingResult, Model model) {
@@ -82,7 +87,7 @@ public class UserController {
         return "redirect:all";
     }
 
-    @PostMapping("/delete/{id}")
+    @PostMapping("/delete/{id}") 
     public String deleteUser(@PathVariable String id) {
     	System.out.println("Checking......");
         userService.deleteUser(id);
@@ -95,36 +100,63 @@ public class UserController {
         return "AdminMst/login";
     }
     
-    
     //http://localhost:8080/user/login
     @PostMapping("/login")
-    public String login(@ModelAttribute("user") User user, Model model,BindingResult bindingResult) throws ApiException {
-    	
-    	if(bindingResult.hasErrors()) {
-    		return "AdminMst/login";
-    	}
-    	User user1=userService.getUserByLoginId(user.getLoginId());
-    	System.out.println(user.toString());
-        Optional<User> loggedInUser = userService.login(user.getLoginId(), user.getPassword());
-
-        int val=userService.getflagValue(user.getLoginId());
-        
-        
-        if (loggedInUser.isPresent() && val<=3) {
-        	userService.setFlagByZero(user.getLoginId());
-            model.addAttribute("user", loggedInUser.get());
-            return "AdminMst/dashboard";
-        } else {
-        	if(val>3) {
-//        		throw new ApiException("You have been block for 24 hours");
-        		return "AdminMst/error";
-        	}
-        	userService.setFlagByOne(user1.getLoginId());
-        	
-            model.addAttribute("error", "Invalid Login ID or Password");
+    public String login(@ModelAttribute("user") User user, Model model, BindingResult bindingResult) throws ApiException {
+        if (bindingResult.hasErrors()) {
             return "AdminMst/login";
         }
-    } 
+
+        User user1 = userService.getUserByLoginId(user.getLoginId());
+        if (user1 == null) {
+            model.addAttribute("error", "Invalid Login ID!");   
+            return "AdminMst/login";
+        }
+
+        String loginId = user.getLoginId();
+        int val = userService.getflagValue(loginId);
+//        if (val >= 3) {
+//            model.addAttribute("error", "You have been blocked for 24 hours...");
+//            return "AdminMst/login";
+//        }
+        if (!user.getPassword().equals(user1.getPassword())) {
+        	if (val >= 3) {
+                model.addAttribute("error", "You have been blocked for 24 hours...");
+                return "AdminMst/login";
+            }
+            loginEntryService.recordFailedLogin(loginId);
+            userService.setFlagByOne(loginId);
+            model.addAttribute("error", "Wrong password! Attempt " + (val + 1) + " of 3.");
+            return "AdminMst/login";
+        }
+        LocalDateTime lastLogin = loginEntryService.getLastLoginTime(loginId);
+        
+
+        if (lastLogin != null) {
+            LocalDateTime now = LocalDateTime.now();
+            long hoursBetween = ChronoUnit.HOURS.between(lastLogin, now);
+            System.out.println("Hours of user last login block "+hoursBetween);
+            if (hoursBetween < 24) {
+                model.addAttribute("error", "You can only login once every 24 hours. Last login: " + lastLogin);
+                return "AdminMst/login";
+            }
+        }
+        
+	     userService.setFlagByZero(loginId);
+	
+	     Optional<User> loggedInUser = userService.login(loginId, user.getPassword());
+	     if (loggedInUser.isPresent()) {
+	    	 loginEntryService.clearLoginEntries(loginId);
+	         model.addAttribute("user", loggedInUser.get());
+//	         return "AdminMst/dashboard";
+	         return "redirect:all";
+	     } else {
+	         model.addAttribute("error", "Login failed — please try again later.");
+	         return "AdminMst/login";
+	     }
+	     
+    }
+
     
     @GetMapping("/{loginId}")
     public User getUserDetails(@PathVariable String loginId) throws ApiException {

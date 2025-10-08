@@ -148,7 +148,8 @@ public class UserController {
 	     if (loggedInUser.isPresent()) {
 	    	 loginEntryService.clearLoginEntries(loginId);
 	         model.addAttribute("user", loggedInUser.get());
-	         return "AdminMst/dashboard";
+//	         return "AdminMst/dashboard";
+	         return "redirect:all";
 	     } else {
 	         model.addAttribute("error", "Login failed — please try again later.");
 	         return "AdminMst/login";

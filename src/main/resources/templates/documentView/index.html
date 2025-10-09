@@ -1,60 +1,18 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
-    <title>All Locations</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script>
-        function confirmDelete() {
-            return confirm("Are you sure you want to delete this location?");
-        }
-    </script>
+<meta charset="UTF-8">
+<title>All Documents</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 <!-- Navbar Fragment -->
    
 <div th:replace="~{fragment/navbar :: navbar}"></div>
-
-<div class="container mt-5">
-    <h2 class="mb-4">All Locations</h2>
-
-    
-
-    <table class="table table-bordered table-striped">
-        <thead class="table-light">
-            <tr>
-                <th>Code</th>
-                <th>Name</th>
-                <th>Short Name</th>
-                <th>Section Code</th>
-                <th>Map Code</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="loc : ${locations}">
-                <td th:text="${loc.loc_cd}"></td>
-                <td th:text="${loc.loc_name}"></td>
-                <td th:text="${loc.loc_srt_nm}"></td>
-                <td th:text="${loc.sec_cd}"></td>
-                <td th:text="${loc.aloc_map_cd}"></td>
-                <td th:text="${loc.status}"></td>
-                <td>
-                    <a th:href="@{/locations/edit/{loc_cd}(loc_cd=${loc.loc_cd})}" class="btn btn-sm btn-warning">Edit</a>
-                    <form th:action="@{/locations/delete/{loc_cd}(loc_cd=${loc.loc_cd})}" 
-                          method="post" class="d-inline" onsubmit="return confirmDelete()">
-                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                    </form>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-   <div th:if="${message}" class="alert alert-success mt-2" th:text="${message}"></div>
-   <div th:if="${errorMessage}" class="alert alert-danger mt-2" th:text="${errorMessage}"></div>
-   
-   
-
-<!--    <h3 class="mt-4">Uploaded Documents</h3>
+  <h3 class="mt-4">Uploaded Documents</h3>
+  <button class="btn btn-primary" onClick="location.href='documents/upload'">
+                <i class="bi bi-plus-circle"></i> Upload Documents
+            </button>
 <table class="table table-bordered table-striped">
     <thead class="table-light">
         <tr>
@@ -88,12 +46,13 @@
 </div>
 
 
+<!-- Document View -->
 <div id="previewSection" class="mt-4" style="display:none;">
     <h5>Document Preview</h5>
     <div id="previewContent" style="width:100%; height:auto; border:none;"></div>
     <a id="downloadBtn" class="btn btn-success mt-2" href="#" target="_blank">Download</a>
      <button type="button" class="btn btn-sm btn-danger" onclick="closePreview()">Close</button>
-</div> -->
+</div>
 
 <script>
 function showPreview(viewUrl, downloadUrl, fileName) {
@@ -130,4 +89,3 @@ function closePreview(){
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-

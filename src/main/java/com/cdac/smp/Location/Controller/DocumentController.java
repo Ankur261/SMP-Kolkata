@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -26,18 +27,54 @@ public class DocumentController {
         this.documentService = documentService;
     }
     
+    @GetMapping("")
+    public String allDocuments(Model model) {
+    	model.addAttribute("documents",documentService.getAllDocuments());
+    	return "documentView/index" ;
+    }
+    
     @GetMapping("/upload")
-    public String showUploadForm() {
+    public String showUploadForm(Model model) {
+    	String currentUser = "Ankur";
+
+        Optional<Documents> lastTempDocOpt = documentService.getLastDraft(currentUser);
+
+        Documents document = lastTempDocOpt.orElse(new Documents());
+        if (document.getUploadedBy() == null)
+            document.setUploadedBy(currentUser);
+
+        model.addAttribute("document", document);
+        
+        System.out.println("desc: " + document.getDocDesc());
+        System.out.println("uploaded by: " +document.getUploadedBy());
+        System.out.println("isTemp: " +document.isTemp());
+        System.out.println("date: " +document.getUploadedAt());
         return "uploadDocument";
     }
 
     @PostMapping("/upload")
     public String uploadFile(@RequestParam("file") MultipartFile file,
+    						 @RequestParam("action") String action,
                              @RequestParam("docDesc") String docDesc,
                              @RequestParam("uploadedBy") String uploadedBy,
                              RedirectAttributes redirectAttributes) {
         try {
-            String fileId = documentService.saveDocument(file, docDesc, uploadedBy);
+        	
+            String fileId = documentService.saveDocument(file, docDesc, uploadedBy, action.equals("save"));
+            redirectAttributes.addFlashAttribute("message", "File uploaded successfully with ID: " + fileId);
+        } catch (IOException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "File upload failed: " + e.getMessage());
+        }
+        return "redirect:/locations/view";
+    }
+    
+    @PostMapping("/save")
+    public String savePartialForm(@RequestParam("file") MultipartFile file,
+                             @RequestParam("docDesc") String docDesc,
+                             @RequestParam("uploadedBy") String uploadedBy,
+                             RedirectAttributes redirectAttributes) {
+        try {
+            String fileId = documentService.saveDocument(file, docDesc, uploadedBy, true);
             redirectAttributes.addFlashAttribute("message", "File uploaded successfully with ID: " + fileId);
         } catch (IOException e) {
             redirectAttributes.addFlashAttribute("errorMessage", "File upload failed: " + e.getMessage());

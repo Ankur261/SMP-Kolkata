@@ -26,7 +26,7 @@ public class DocumentService {
     }
 
     // Save document with metadata + file content
-    public String saveDocument(MultipartFile file, String desc, String uploadedBy) throws IOException {
+    public String saveDocument(MultipartFile file, String desc, String uploadedBy, boolean isTemp) throws IOException {
         Documents doc = new Documents();
         doc.setDocFileId(UUID.randomUUID().toString());
         doc.setDocFileName(file.getOriginalFilename());
@@ -35,7 +35,8 @@ public class DocumentService {
         doc.setUploadedBy(uploadedBy);
         doc.setUploadedAt(LocalDateTime.now());
         doc.setFileData(new Binary(file.getBytes())); // store actual bytes
-
+        doc.setDelFlag(false);
+        doc.setTemp(isTemp);
         documentsRepository.save(doc);
         return doc.getDocFileId();
     }
@@ -47,5 +48,9 @@ public class DocumentService {
     
     public List<Documents> getAllDocuments() {
         return documentsRepository.findAll();
+    }
+    
+    public Optional<Documents> getLastDraft(String uploadedBy) {
+        return documentsRepository.findTopByUploadedByAndIsTempOrderByUploadedAtDesc(uploadedBy, true);
     }
 }
